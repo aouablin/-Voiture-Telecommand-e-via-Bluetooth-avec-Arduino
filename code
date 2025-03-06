@@ -1,0 +1,92 @@
+// Definition des pins Arduino-Motor Driver
+#define IN1 10
+#define IN2 9
+#define IN3 5
+#define IN4 4
+#define ENA 3
+#define ENB 6
+void setup () {
+
+Serial.begin(9600); //initialisé la communication série avec le HC-05
+
+//configuration des pins moteur driver
+pinMode(ENA,OUTPUT);
+pinMode(ENB,OUTPUT);
+pinMode(IN1,OUTPUT);
+pinMode(IN2,OUTPUT);
+pinMode(IN3,OUTPUT);
+pinMode(IN4,OUTPUT);
+}
+
+void loop() {
+
+//L'application
+if (Serial.available() > 0) {
+    char command = Serial.read();
+    arret(); //Initializer avec le moteur arrêté 
+   switch(command){
+    case 'F':  
+      avant();
+      break;
+    case 'B':  
+       arriere();
+      break;
+    case 'L':  
+      tourner_a_gauche();
+      break;
+    case 'R':
+      tourner_a_droite();
+      break;
+      default:
+        arret(); // arret si command inconnue 
+        break;
+    }
+}
+}
+
+
+// Definitions des fonctions
+  void avant (){
+analogWrite(ENA,150);
+analogWrite(ENB,150);
+digitalWrite(IN1,LOW);
+digitalWrite(IN2,HIGH);
+digitalWrite(IN3,LOW);
+digitalWrite(IN4,HIGH);
+  }
+
+  void arriere (){
+analogWrite(ENA,150);
+analogWrite(ENB,150);
+digitalWrite(IN1,HIGH);
+digitalWrite(IN2,LOW);
+digitalWrite(IN3,HIGH);
+digitalWrite(IN4,LOW);
+  }
+
+  void tourner_a_droite (){
+analogWrite(ENA,0);
+analogWrite(ENB,150);
+digitalWrite(IN1,LOW);
+digitalWrite(IN2,LOW);
+digitalWrite(IN3,LOW);
+digitalWrite(IN4,HIGH);
+}
+
+  void tourner_a_gauche (){
+analogWrite(ENA,150);
+analogWrite(ENB,0);
+digitalWrite(IN1,LOW);
+digitalWrite(IN2,HIGH);
+digitalWrite(IN3,LOW);
+digitalWrite(IN4,LOW);
+}
+
+  void arret (){
+analogWrite(ENA,0);
+analogWrite(ENB,0);
+digitalWrite(IN1,LOW);
+digitalWrite(IN2,LOW);
+digitalWrite(IN3,LOW);
+digitalWrite(IN4,LOW);
+  }
